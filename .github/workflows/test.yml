@@ -39,8 +39,8 @@ jobs:
         run: |
           erstrm=${erstrm}
           dastrm=${dastrm}
-          sed -i "\|ercdn.net/nowtv| c $erstrm" now.m3u
-          sed -i "\|daioncdn.net/nowtv| c $dastrm" now.m3u
+          sed -i "\|ercdn.net/nowtv| c $erstrm" now/now.m3u8
+          sed -i "\|daioncdn.net/nowtv| c $dastrm" now/now.m3u8
           sed -i "\|ercdn.net/nowtv| c $erstrm" now/import.m3u8
           sed -i "\|daioncdn.net/nowtv| c $dastrm" now/import.m3u8
 
@@ -52,6 +52,6 @@ jobs:
       - name: commit & push
         run: |
           git pull
-          git add now.m3u now/import.m3u8
+          git add now/now.m3u8 now/import.m3u8
           git commit -m "nownew updated"
           git push
