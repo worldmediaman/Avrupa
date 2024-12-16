@@ -39,8 +39,8 @@ jobs:
         run: |
           erstrm=${erstrm}
           dastrm=${dastrm}
-          sed -i "\|ercdn.net/nowtv| c $erstrm" now/nows.m3u8
-          sed -i "\|daioncdn.net/nowtv| c $dastrm" now/nows.m3u8
+          sed -i "\|ercdn.net/nowtv| c $erstrm" playlist.m3u
+          sed -i "\|daioncdn.net/nowtv| c $dastrm" playlist.m3u
           sed -i "\|ercdn.net/nowtv| c $erstrm" now/import.m3u8
           sed -i "\|daioncdn.net/nowtv| c $dastrm" now/import.m3u8
 
@@ -57,7 +57,7 @@ jobs:
           if git diff-index --quiet HEAD --; then
             echo "No changes to commit"
           else
-            git add now/nows.m3u8 now/import.m3u8
+            git add playlist.m3u now/import.m3u8
             git commit -m "nownew updated"
             git push https://github.com/worldmediaman/Avrupa.git
           fi
