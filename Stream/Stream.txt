@@ -2,5 +2,5 @@
 ~~ FORMAT: <channel name> | <group name> | <logo> | <tvg-id>
 
 
-ATV TR | | |
-https://www.youtube.com/@atvturkiye/live
+CNN | | |
+https://www.youtube.com/@cnnturk/live
