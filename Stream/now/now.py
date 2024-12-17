@@ -11,13 +11,14 @@ def fetch_website_content(url):
         print("Failed to fetch the website content.")
         return None
 
-def extract_live_url(content):
-    match = re.search(r'daionUrl\s*:\s*"(https[^"]+)"', content)
-    if match:
-        return match.group(1)
+def extract_live_urls(content):
+    match_mobile = re.search(r'daionUrl\s*:\s*"(https[^"]*mobile_web[^"]*)"', content)
+    match_desktop = re.search(r'daionUrl\s*:\s*"(https[^"]*desktop_web[^"]*)"', content)
+    if match_mobile and match_desktop:
+        return match_mobile.group(1), match_desktop.group(1)
     else:
-        print("Live URL not found in the content.")
-        return None
+        print("Live URLs not found in the content.")
+        return None, None
 
 def fetch_stream_content(url):
     response = requests.get(url)
@@ -30,11 +31,14 @@ def fetch_stream_content(url):
 def main():
     site_content = fetch_website_content(url)
     if site_content:
-        live_url = extract_live_url(site_content)
-        if live_url:
-            stream_content = fetch_stream_content(live_url)
-            if stream_content:
-                print(stream_content)
+        mobile_url, desktop_url = extract_live_urls(site_content)
+        if mobile_url and desktop_url:
+            mobile_content = fetch_stream_content(mobile_url)
+            desktop_content = fetch_stream_content(desktop_url)
+            if mobile_content:
+                print("Mobile URL content:\n", mobile_content)
+            if desktop_content:
+                print("Desktop URL content:\n", desktop_content)
 
 if __name__ == "__main__":
     main()
