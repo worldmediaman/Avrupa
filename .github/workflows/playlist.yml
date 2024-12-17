@@ -67,4 +67,5 @@ jobs:
           else
             git add playlist.m3u tmp/now.m3u8
             git commit -m "nownew updated"
-            git push https://github.com/worldmediaman/Avrupa.git
+            git push origin main
+fi
