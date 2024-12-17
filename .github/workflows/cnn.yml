@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: atvtr
+name: CNN
 
 # Controls when the action will run. 
 on:
@@ -37,7 +37,7 @@ jobs:
           git config --global user.email "<>"
           git config --global user.name "cnn bot"
       
-      - name: updating atvtr
+      - name: updating cnn
         run: sh Stream/cnn.sh
         
       - name: git add
