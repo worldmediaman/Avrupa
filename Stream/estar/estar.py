@@ -1,53 +1,50 @@
-import requests
-import re
+name: EuroStar
 
-base_url = "https://mn-nl.mncdn.com/dogusdyg_eurostar/"
-url = "https://www.eurostartv.com.tr/canli-izle"
+on:
+  schedule:
+    - cron: '0 */1 * * *'
+  workflow_dispatch:
 
-def fetch_website_content(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    else:
-        print("Failed to fetch the website content.")
-        return None
+jobs:
+  build:
+    runs-on: ubuntu-latest
 
-def extract_live_url(content):
-    match = re.search(r'liveUrl = \'(.*?)\'', content)
-    if match:
-        return match.group(1)
-    else:
-        print("Live URL not found in the content.")
-        return None
+    steps:
+      - uses: actions/checkout@v3
 
-def fetch_stream_content(url):
-    response = requests.get(url)
-    if response.status_code == 200:
-        return response.text
-    else:
-        print("Failed to fetch content.")
-        return None
+      - name: config
+        run: |
+          git config --global user.email "your-email@example.com"
+          git config --global user.name "estar bot"
 
-def modify_content(content, base_url):
-    lines = content.split("\n")
-    modified_content = ""
-    for line in lines:
-        if line.startswith("live_"):
-            full_url = base_url + line
-            modified_content += full_url + "\n"
-        else:
-            modified_content += line + "\n"
-    return modified_content
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.x'
 
-def main():
-    site_content = fetch_website_content(url)
-    if site_content:
-        live_url = extract_live_url(site_content)
-        if live_url:
-            stream_content = fetch_stream_content(live_url)
-            if stream_content:
-                modified_content = modify_content(stream_content, base_url)
-                print(modified_content)
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
 
-if __name__ == "__main__":
-    main()
+      - name: Install requests module
+        run: python3 -m pip install requests
+
+      - name: Execute Python script
+        run: python3 Stream/estar/estar.py > Stream/estar/estar.m3u8
+
+      - name: git add
+        run: |
+          git add -A
+          ls -la 
+
+      - name: commit & push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          git pull origin main
+          if git diff-index --quiet HEAD --; then
+            echo "No changes to commit, ending workflow successfully."
+            exit 0
+          else
+            git commit -m "estar updated"
+            git push origin main
